@@ -1,0 +1,354 @@
+
+@font-face {
+    font-family: 'Anjoman Max';
+    src: url('/assets/fonts/anjoman/AnjomanMax-Thin.eot');
+    src: local('Anjoman Max Thin'), local('AnjomanMax-Thin'),
+        url('/assets/fonts/anjoman/AnjomanMax-Thin.eot?#iefix') format('embedded-opentype'),
+        url('/assets/fonts/anjoman/AnjomanMax-Thin.woff2') format('woff2'),
+        url('/assets/fonts/anjoman/AnjomanMax-Thin.woff') format('woff'),
+        url('/assets/fonts/anjoman/AnjomanMax-Thin.ttf') format('truetype'),
+        url('/assets/fonts/anjoman/AnjomanMax-Thin.svg#AnjomanMax-Thin') format('svg');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'Anjoman Max';
+    src: url('/assets/fonts/anjoman/Anjoman-Medium.eot');
+    src: local('Anjoman Max Medium'), local('AnjomanMax-Medium'),
+        url('/assets/fonts/anjoman/Anjoman-Medium.eot?#iefix') format('embedded-opentype'),
+        url('/assets/fonts/anjoman/Anjoman-Medium.woff2') format('woff2'),
+        url('/assets/fonts/anjoman/Anjoman-Medium.woff') format('woff'),
+        url('/assets/fonts/anjoman/Anjoman-Medium.ttf') format('truetype'),
+        url('/assets/fonts/anjoman/Anjoman-Medium.svg#AnjomanMax-Medium') format('svg');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Anjoman Max';
+    src: url('/assets/fonts/anjoman/Anjoman-Regular.eot');
+    src: local('Anjoman Max Regular'), local('AnjomanMax-Regular'),
+        url('/assets/fonts/anjoman/Anjoman-Regular.eot?#iefix') format('embedded-opentype'),
+        url('/assets/fonts/anjoman/Anjoman-Regular.woff2') format('woff2'),
+        url('/assets/fonts/anjoman/Anjoman-Regular.woff') format('woff'),
+        url('/assets/fonts/anjoman/Anjoman-Regular.ttf') format('truetype'),
+        url('/assets/fonts/anjoman/Anjoman-Regular.svg#AnjomanMax-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+@font-face {
+    font-family: 'Anjoman Max';
+    src: url('/assets/fonts/anjoman/Anjoman-Light.eot');
+    src: local('Anjoman Max Light'), local('AnjomanMax-Light'),
+        url('/assets/fonts/anjoman/Anjoman-Light.eot?#iefix') format('embedded-opentype'),
+        url('/assets/fonts/anjoman/Anjoman-Light.woff2') format('woff2'),
+        url('/assets/fonts/anjoman/Anjoman-Light.woff') format('woff'),
+        url('/assets/fonts/anjoman/Anjoman-Light.ttf') format('truetype'),
+        url('/assets/fonts/anjoman/Anjoman-Light.svg#AnjomanMax-Light') format('svg');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+
+@font-face {
+    font-family: 'Anjoman Max';
+    src: url('/assets/fonts/anjoman/Anjoman-SemiBold.eot');
+    src: local('Anjoman Max SemiBold'), local('AnjomanMax-SemiBold'),
+        url('/assets/fonts/anjoman/Anjoman-SemiBold.eot?#iefix') format('embedded-opentype'),
+        url('/assets/fonts/anjoman/Anjoman-SemiBold.woff2') format('woff2'),
+        url('/assets/fonts/anjoman/Anjoman-SemiBold.woff') format('woff'),
+        url('/assets/fonts/anjoman/Anjoman-SemiBold.ttf') format('truetype'),
+        url('/assets/fonts/anjoman/Anjoman-SemiBold.svg#AnjomanMax-SemiBold') format('svg');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+/* استایل‌های سفارشی */
+body {
+    font-family: 'Tahoma', sans-serif;
+}
+/* صفحه ثبت نام */
+
+h2.register {
+    font-family: 'Anjoman Max';
+    text-align: center;
+}
+/* استایل‌های سفارشی */
+body {
+    font-family: 'Tahoma', sans-serif;
+}
+
+.navbar-brand {
+    font-weight: bold;
+}
+
+.dropdown-menu {
+    min-width: 200px;
+}
+
+.profile-image {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+input#username {
+    font-family: 'Anjoman Max';
+    text-align: left;
+} 
+input#password {
+    font-family: 'Anjoman Max';
+    text-align: left;
+}
+
+
+/* قسمت استان ها و شهرستان ها*/
+select#province {
+    text-align: right;
+    font-family: 'Anjoman Max';
+}
+input#station_code {
+    text-align: left;
+    font-family: 'Anjoman Max';
+}
+select#city {
+    text-align: right;
+    margin-bottom: 5px;
+    font-family: 'Anjoman Max';
+}
+input#fullname {
+    text-align: right;
+    font-family: 'Anjoman Max';
+}
+input#national_code {
+    font-family: 'Anjoman Max';
+    text-align: left;
+}
+input#personnel_code {
+    font-family: 'Anjoman Max';
+    text-align: left;
+}
+/* هدر برنامه */
+a.navbar-brand {
+    font-family: 'Anjoman Max';
+    font-weight: bold;
+}
+a.nav-link {
+    font-family: 'Anjoman Max';
+    font-weight: 400;
+}
+div#navbarNav {
+    text-align: center;
+    margin-right: 5%;
+}
+
+/* Chrome, Safari, Edge, Opera */  
+input::-webkit-outer-spin-button,  
+input::-webkit-inner-spin-button {  
+  -webkit-appearance: none;  
+  margin: 0;  
+}  
+
+/* Firefox */  
+input[type=number] {  
+  -moz-appearance: textfield;  
+}  
+
+/* صفحه اصلی سایت */
+.container1 {
+    margin-top: 60px;
+    text-align: center;
+}
+
+.container1 {
+    margin-top: 60px;
+    text-align: center;
+    font-family: 'Anjoman Max';
+}
+p.home-p {
+    margin-top: 30px;
+}
+
+p.home-lo-re {
+    font-family: 'Anjoman Max';
+}
+a.login-home1 {
+    font-family: 'Anjoman Max';
+    font-weight: 900;
+}
+a.home-register1 {
+    font-family: 'Anjoman Max';
+    font-weight: 900;
+}
+
+/* داشبورد */
+.dashboard {
+    margin-top: 35px;
+}
+h2.dashboard-txt {
+    text-align: center;
+    font-family: 'Anjoman Max';
+    font-weight: 900;
+}
+.col-md-4 {
+    margin-top: 53px;
+    text-align: center;
+    font-family: 'Anjoman Max';
+}
+.card-body {
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    min-height: 1px;
+    padding: 2.25rem;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: right; /* راست‌چین کردن متن */
+    direction: rtl; /* راست‌چین کردن جهت متن */
+}
+
+.container {
+    margin-top: 20px;
+}
+
+.card {
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.card-text {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+@media (min-width: 768px) {
+    .col-md-4 {
+        -ms-flex: 0 0 33.333333%;
+        flex: auto;
+        max-width: inherit;
+    }
+}
+h2.login-voroud {
+    font-family: 'Anjoman Max';
+    text-align: center;
+    font-weight: bold;
+}
+form.login-form {
+    direction: rtl;
+    text-align: right;
+}
+.form-control {
+    width: 30%;
+
+    direction: ltr;
+}
+
+.container {  
+    width: 89% !important; /* یا هر عرضی که مناسب میدونید */  
+    margin: 0 auto; /* فرم رو وسط صفحه افقی قرار میده */  
+    padding: 20px;  
+    border: 1px solid #ccc; /* برای دیدن محدوده فرم */  
+    border-radius: 25px;  
+    margin-top: 98px;
+}  
+
+.login-form {  
+    display: flex;  
+    flex-direction: column;  
+    align-items: center; /* محتویات فرم رو وسط چین میکنه */  
+}  
+
+.form-group {  
+    margin-bottom: 15px;  
+    width: 100%; /* عرض فیلدها رو به اندازه کانتینر میکنه */  
+}  
+
+.form-group label {  
+    display: block; /* label رو به یک بلاک تبدیل میکنه تا زیر هم قرار بگیرند */  
+    text-align: right; /* متن label رو راست چین میکنه */  
+    margin-bottom: 5px;  
+    font-family: 'Anjoman Max';
+    font-weight: 400;
+}  
+
+.form-control {  
+    width: 150px; /* طول فیلد نام کاربری و رمز عبور */  
+    padding: 8px;  
+    border: 1px solid #ccc;  
+    border-radius: 4px;  
+    box-sizing: border-box; /* padding و border رو جزو عرض حساب میکنه */  
+    margin: 0 auto; /* فیلد رو وسط چین میکنه */  
+    display: block; /* فیلد رو به یک بلاک تبدیل میکنه */  
+}  
+
+.btn-primary {  
+    padding: 10px 20px;  
+    background-color: #007bff;  
+    color: #fff;  
+    border: none;  
+    border-radius: 4px;  
+    cursor: pointer;  
+}  
+
+.login-voroud {  
+    text-align: center; /* عنوان "ورود به سیستم" رو وسط چین میکنه */  
+    margin-bottom: 20px;  
+}  
+@media (min-width: 1200px) {
+    .container, .container-lg, .container-md, .container-sm, .container-xl {
+        max-width: 90% !important; 
+    }
+}
+@media (min-width: 768px) {
+    .container, .container-md, .container-sm {
+        max-width: 300px;
+    }
+}
+
+@media (min-width: 576px) {
+    .container, .container-sm {
+        width: 30% !important;
+    }
+}
+
+@media (min-width: 476px) {
+    .container, .container-sm {
+        width: 55% !important;
+    }
+}
+
+footer.footer.mt-auto.py-3 {
+    text-align: center;
+    font-family: 'Anjoman Max';
+    font-weight: 300;
+}
+.logo-header {
+    display: flex
+;
+    align-items: center;
+    flex-direction: row-reverse;
+}
+.logo-header img {  
+    max-height: 50px; /* ارتفاع لوگو */  
+    margin-left: 10px; /* فاصله از متن */  
+}  
+.bg-light {
+    border: 1px solid #d1cdcd;
+    border-width: 0 0 1px 0;
+    box-shadow: -4px -1px 20px 0px hsl(0deg 0% 0% / 0.25);
+}
+
+

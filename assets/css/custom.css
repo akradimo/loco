@@ -1,0 +1,170 @@
+/* فایل custom.css */
+body {
+    background-color: #f8f9fa;
+    font-family: 'Vazir', sans-serif;
+}
+
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+    margin-top: 20px;
+}
+
+.table {
+    margin-top: 20px;
+}
+
+.alert {
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #e0a800;
+}
+/* فایل custom.css */
+#groupTree ul {
+    list-style-type: none;
+    padding-left: 20px;
+}
+
+#groupTree li {
+    cursor: pointer;
+    padding: 5px;
+}
+
+#groupTree li:hover {
+    background-color: #f8f9fa;
+}
+body {
+    font-family: 'Vazir', sans-serif;
+}
+
+.navbar {
+    margin-bottom: 20px;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}
+body {
+    font-family: 'Vazir', sans-serif;
+}
+
+.navbar {
+    margin-bottom: 20px;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}
+
+/* استایل‌های سفارشی برای منوهای بازشونده */
+.navbar .dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.navbar .dropdown-menu {
+    margin-top: 0; /* حذف فاصله بین منو و دکمه */
+}
+body {
+    font-family: 'Vazir', sans-serif;
+}
+
+.navbar {
+    margin-bottom: 20px;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}
+
+/* استایل‌های سفارشی برای منوهای بازشونده */
+.navbar .dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.navbar .dropdown-menu {
+    margin-top: 0; /* حذف فاصله بین منو و دکمه */
+    display: none; /* مخفی کردن منو به‌صورت پیش‌فرض */
+    position: absolute;
+    background-color: #343a40; /* رنگ پس‌زمینه منو */
+    border: none;
+    border-radius: 0;
+}
+
+.navbar .dropdown-menu a {
+    color: #fff; /* رنگ متن منو */
+    padding: 10px 20px;
+}
+
+.navbar .dropdown-menu a:hover {
+    background-color: #495057; /* رنگ پس‌زمینه هنگام hover */
+}
+body {
+    font-family: 'Vazir', sans-serif;
+}
+
+.navbar {
+    margin-bottom: 20px;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+}
+
+/* استایل‌های سفارشی برای منوهای بازشونده */
+.navbar .dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.navbar .dropdown-menu {
+    margin-top: 0; /* حذف فاصله بین منو و دکمه */
+    display: none; /* مخفی کردن منو به‌صورت پیش‌فرض */
+    position: absolute;
+    background-color: #343a40; /* رنگ پس‌زمینه منو */
+    border: none;
+    border-radius: 0;
+}
+
+.navbar .dropdown-menu a {
+    color: #fff; /* رنگ متن منو */
+    padding: 10px 20px;
+}
+
+.navbar .dropdown-menu a:hover {
+    background-color: #495057; /* رنگ پس‌زمینه هنگام hover */
+}
