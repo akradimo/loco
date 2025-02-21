@@ -12,6 +12,5 @@ if (isset($_GET['id'])) {
     $stmt->execute();
 }
 
-header("Location: /loco/pages/list_errors.php");
-exit();
+redirect('/loco/pages/list_errors.php');
 ?>
