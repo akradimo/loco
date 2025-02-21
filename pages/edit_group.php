@@ -1,28 +1,44 @@
 <?php
 include '../includes/auth.php';
+
+if (!$_SESSION['can_edit_group']) {
+    header("Location: /loco/pages/access_denied.php");
+    exit();
+}
+
 include '../includes/db.php';
 
-checkAuth();
-$conn = getDbConnection();
+$group_id = $_GET['id'] ?? null;
+if (!$group_id) {
+    header("Location: /loco/pages/list_groups.php");
+    exit();
+}
 
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
-    $stmt = $conn->prepare("SELECT * FROM error_groups WHERE id = :id");
-    $stmt->bindParam(':id', $id);
-    $stmt->execute();
-    $group = $stmt->fetch();
+// دریافت اطلاعات گروه برای ویرایش
+$stmt = $conn->prepare("SELECT * FROM error_groups WHERE id = :group_id");
+$stmt->execute(['group_id' => $group_id]);
+$group = $stmt->fetch();
+
+if (!$group) {
+    header("Location: /loco/pages/list_groups.php");
+    exit();
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $group_name = $_POST['group_name'];
 
-    $stmt = $conn->prepare("UPDATE error_groups SET group_name = :group_name WHERE id = :id");
-    $stmt->bindParam(':group_name', $group_name);
-    $stmt->bindParam(':id', $id);
-    $stmt->execute();
+    if (empty($group_name)) {
+        $error_message = "لطفاً نام گروه را وارد کنید.";
+    } else {
+        $stmt = $conn->prepare("UPDATE error_groups SET group_name = :group_name WHERE id = :group_id");
+        $stmt->execute([
+            'group_name' => $group_name,
+            'group_id' => $group_id
+        ]);
 
-    header("Location: /loco/pages/list_groups.php");
-    exit();
+        header("Location: /loco/pages/list_groups.php?success=1");
+        exit();
+    }
 }
 ?>
 
@@ -38,9 +54,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php include '../includes/header.php'; ?>
     <div class="container mt-5">
         <h2 class="text-center mb-4">ویرایش گروه</h2>
-        <form method="POST">
+        <form method="post">
             <div class="form-group">
-                <label for="group_name">نام گروه</label>
+                <label for="group_name">نام گروه:</label>
                 <input type="text" class="form-control" id="group_name" name="group_name" value="<?php echo htmlspecialchars($group['group_name']); ?>" required>
             </div>
             <button type="submit" class="btn btn-primary">ذخیره تغییرات</button>

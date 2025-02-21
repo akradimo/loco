@@ -1,9 +1,12 @@
 <?php
-include '../includes/auth.php'; // فقط یک بار فراخوانی شود
-include '../includes/db.php';
+include '../includes/auth.php';
 
-checkAuth(); // فراخوانی تابع برای بررسی احراز هویت
-$conn = getDbConnection();
+if (!$_SESSION['can_view_errors']) {
+    header("Location: /loco/pages/access_denied.php");
+    exit();
+}
+
+include '../includes/db.php';
 
 // دریافت لیست گروه‌ها
 $stmt = $conn->prepare("SELECT * FROM error_groups");
@@ -23,27 +26,39 @@ $groups = $stmt->fetchAll();
     <?php include '../includes/header.php'; ?>
     <div class="container mt-5">
         <h2 class="text-center mb-4">لیست گروه‌ها</h2>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>نام گروه</th>
-                    <th>تاریخ ایجاد</th>
-                    <th>عملیات</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($groups as $group): ?>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
                     <tr>
-                        <td><?php echo htmlspecialchars($group['group_name']); ?></td>
-                        <td><?php echo htmlspecialchars($group['created_at'] ?? 'N/A'); ?></td>
-                        <td>
-                            <a href="/loco/pages/edit_group.php?id=<?php echo $group['id']; ?>" class="btn btn-warning btn-sm">ویرایش</a>
-                            <a href="/loco/includes/delete_group.php?id=<?php echo $group['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('آیا مطمئن هستید؟')">حذف</a>
-                        </td>
+                        <th>نام گروه</th>
+                        <th>گروه والد</th>
+                        <th>عملیات</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($groups as $group): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($group['group_name']); ?></td>
+                            <td>
+                                <?php if ($group['parent_group_id']): ?>
+                                    <?php
+                                    $stmt = $conn->prepare("SELECT group_name FROM error_groups WHERE id = :id");
+                                    $stmt->execute(['id' => $group['parent_group_id']]);
+                                    $parent_group = $stmt->fetch();
+                                    echo htmlspecialchars($parent_group['group_name']);
+                                    ?>
+                                <?php else: ?>
+                                    بدون گروه والد
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <a href="/loco/pages/edit_group.php?id=<?php echo $group['id']; ?>" class="btn btn-warning btn-sm">ویرایش</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
     <?php include '../includes/footer.php'; ?>
 </body>
