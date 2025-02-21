@@ -2,7 +2,9 @@
 include '../includes/auth.php';
 include '../includes/db.php';
 
-// دریافت لیست کاربران
+checkAuth();
+$conn = getDbConnection();
+
 $stmt = $conn->prepare("SELECT * FROM users");
 $stmt->execute();
 $users = $stmt->fetchAll();
@@ -25,7 +27,6 @@ $users = $stmt->fetchAll();
                 <tr>
                     <th>نام کاربری</th>
                     <th>نام کامل</th>
-                    <th>کد پرسنلی</th>
                     <th>نقش</th>
                     <th>عملیات</th>
                 </tr>
@@ -35,7 +36,6 @@ $users = $stmt->fetchAll();
                     <tr>
                         <td><?php echo htmlspecialchars($user['username']); ?></td>
                         <td><?php echo htmlspecialchars($user['fullname']); ?></td>
-                        <td><?php echo htmlspecialchars($user['personal_code'] ?? 'N/A'); ?></td>
                         <td><?php echo $user['is_admin'] ? 'مدیر' : 'کاربر'; ?></td>
                         <td>
                             <a href="/loco/pages/edit_user.php?id=<?php echo $user['id']; ?>" class="btn btn-warning btn-sm">ویرایش</a>

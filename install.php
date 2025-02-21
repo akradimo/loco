@@ -15,42 +15,10 @@ try {
     // انتخاب دیتابیس
     $conn->exec("USE loco");
 
-    // ایجاد جدول users
-    $conn->exec("CREATE TABLE IF NOT EXISTS users (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        username VARCHAR(50) NOT NULL UNIQUE,
-        password VARCHAR(255) NOT NULL,
-        fullname VARCHAR(100) NOT NULL,
-        personal_code VARCHAR(20),
-        is_admin TINYINT(1) DEFAULT 0,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )");
-    echo "جدول 'users' ایجاد شد.<br>";
-
-    // ایجاد جدول error_groups
-    $conn->exec("CREATE TABLE IF NOT EXISTS error_groups (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        group_name VARCHAR(100) NOT NULL UNIQUE,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )");
-    echo "جدول 'error_groups' ایجاد شد.<br>";
-
-    // ایجاد جدول errors
-    $conn->exec("CREATE TABLE IF NOT EXISTS errors (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        error_code VARCHAR(50) NOT NULL UNIQUE,
-        error_name VARCHAR(100) NOT NULL,
-        group_id INT NOT NULL,
-        description TEXT,
-        province VARCHAR(100),
-        city VARCHAR(100),
-        station VARCHAR(100),
-        created_by INT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (group_id) REFERENCES error_groups(id),
-        FOREIGN KEY (created_by) REFERENCES users(id)
-    )");
-    echo "جدول 'errors' ایجاد شد.<br>";
+    // ایجاد جداول
+    $sql = file_get_contents('includes/database.sql');
+    $conn->exec($sql);
+    echo "جداول ایجاد شدند.<br>";
 
     // افزودن کاربر پیش‌فرض (ادمین)
     $username = 'admin';
