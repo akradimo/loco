@@ -1,6 +1,7 @@
 <?php
 include '../includes/auth.php';
 include '../includes/db.php';
+include '../includes/functions.php';
 
 checkAuth();
 $conn = getDbConnection();
@@ -40,6 +41,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $stmt = $conn->prepare("SELECT * FROM error_groups");
 $stmt->execute();
 $groups = $stmt->fetchAll();
+
+// دریافت لیست استان‌ها و شهرستان‌ها از فایل iran.json
+$iranData = json_decode(file_get_contents('../assets/data/iran.json'), true);
+$provinces = array_keys($iranData);
+
+// دریافت لیست ایستگاه‌ها از فایل railway.json
+$railwayData = json_decode(file_get_contents('../assets/data/railway.json'), true);
+$stations = array_keys($railwayData);
 ?>
 
 <!DOCTYPE html>
@@ -77,15 +86,27 @@ $groups = $stmt->fetchAll();
             </div>
             <div class="form-group">
                 <label for="province">استان</label>
-                <input type="text" class="form-control" id="province" name="province" required>
+                <select class="form-control" id="province" name="province" required>
+                    <?php foreach ($provinces as $province): ?>
+                        <option value="<?php echo htmlspecialchars($province); ?>"><?php echo htmlspecialchars($province); ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
             <div class="form-group">
-                <label for="city">شهر</label>
-                <input type="text" class="form-control" id="city" name="city" required>
+                <label for="city">شهرستان</label>
+                <select class="form-control" id="city" name="city" required>
+                    <?php foreach ($iranData[$_POST['province']] ?? [] as $city): ?>
+                        <option value="<?php echo htmlspecialchars($city); ?>"><?php echo htmlspecialchars($city); ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
             <div class="form-group">
                 <label for="station">ایستگاه</label>
-                <input type="text" class="form-control" id="station" name="station" required>
+                <select class="form-control" id="station" name="station" required>
+                    <?php foreach ($stations as $station): ?>
+                        <option value="<?php echo htmlspecialchars($station); ?>"><?php echo htmlspecialchars($station); ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
             <button type="submit" class="btn btn-primary">افزودن خطا</button>
         </form>

@@ -1,60 +1,49 @@
 <?php
 include '../includes/auth.php';
 include '../includes/db.php';
+include '../includes/functions.php';
 
 checkAuth();
 $conn = getDbConnection();
 
-$stmt = $conn->prepare("SELECT errors.*, users.fullname, error_groups.group_name 
-                        FROM errors 
-                        JOIN users ON errors.created_by = users.id 
-                        JOIN error_groups ON errors.group_id = error_groups.id");
+// دریافت لیست کاربران
+$stmt = $conn->prepare("SELECT * FROM users");
 $stmt->execute();
-$errors = $stmt->fetchAll();
+$users = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>لیست خطاها</title>
+    <title>لیست کاربران</title>
     <link rel="stylesheet" href="/loco/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/loco/assets/css/custom.css">
 </head>
 <body>
     <?php include '../includes/header.php'; ?>
     <div class="container mt-5">
-        <h2 class="text-center mb-4">لیست خطاها</h2>
+        <h2 class="text-center mb-4">لیست کاربران</h2>
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>کد خطا</th>
-                    <th>نام خطا</th>
-                    <th>گروه</th>
-                    <th>توضیحات</th>
-                    <th>استان</th>
-                    <th>شهر</th>
-                    <th>ایستگاه</th>
-                    <th>تاریخ ایجاد</th>
-                    <th>ایجاد کننده</th>
+                    <th>نام کاربری</th>
+                    <th>نام کامل</th>
+                    <th>کد پرسنلی</th>
+                    <th>نقش</th>
                     <th>عملیات</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($errors as $error): ?>
+                <?php foreach ($users as $user): ?>
                     <tr>
-                        <td><?php echo htmlspecialchars($error['error_code']); ?></td>
-                        <td><?php echo htmlspecialchars($error['error_name']); ?></td>
-                        <td><?php echo htmlspecialchars($error['group_name']); ?></td>
-                        <td><?php echo htmlspecialchars($error['description']); ?></td>
-                        <td><?php echo htmlspecialchars($error['province']); ?></td>
-                        <td><?php echo htmlspecialchars($error['city']); ?></td>
-                        <td><?php echo htmlspecialchars($error['station']); ?></td>
-                        <td><?php echo htmlspecialchars($error['created_at']); ?></td>
-                        <td><?php echo htmlspecialchars($error['fullname']); ?></td>
+                        <td><?php echo htmlspecialchars($user['username']); ?></td>
+                        <td><?php echo htmlspecialchars($user['fullname']); ?></td>
+                        <td><?php echo htmlspecialchars($user['personal_code'] ?? 'N/A'); ?></td>
+                        <td><?php echo $user['is_admin'] ? 'مدیر' : 'کاربر'; ?></td>
                         <td>
-                            <a href="/loco/pages/edit_error.php?id=<?php echo $error['id']; ?>" class="btn btn-warning btn-sm">ویرایش</a>
-                            <a href="/loco/includes/delete_error.php?id=<?php echo $error['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('آیا مطمئن هستید؟')">حذف</a>
+                            <a href="/loco/pages/edit_user.php?id=<?php echo $user['id']; ?>" class="btn btn-warning btn-sm">ویرایش</a>
+                            <a href="/loco/includes/delete_user.php?id=<?php echo $user['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('آیا مطمئن هستید؟')">حذف</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
