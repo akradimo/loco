@@ -1,25 +1,25 @@
 <?php
 include '../includes/auth.php';
+include '../includes/db.php';
 
-if (!$_SESSION['can_add_group']) {
+checkAuth();
+
+// بررسی نقش کاربر (فقط ادمین می‌تواند گروه اضافه کند)
+if (!$_SESSION['is_admin']) {
     header("Location: /loco/pages/access_denied.php");
     exit();
 }
 
-include '../includes/db.php';
+$conn = getDbConnection();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $group_name = $_POST['group_name'];
+    $group_name = sanitizeInput($_POST['group_name']);
 
-    if (empty($group_name)) {
-        $error_message = "لطفاً نام گروه را وارد کنید.";
-    } else {
-        $stmt = $conn->prepare("INSERT INTO error_groups (group_name) VALUES (:group_name)");
-        $stmt->execute(['group_name' => $group_name]);
+    $stmt = $conn->prepare("INSERT INTO error_groups (group_name) VALUES (:group_name)");
+    $stmt->bindParam(':group_name', $group_name);
+    $stmt->execute();
 
-        header("Location: /loco/pages/list_groups.php?success=1");
-        exit();
-    }
+    redirect('/loco/pages/list_groups.php');
 }
 ?>
 
@@ -35,12 +35,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php include '../includes/header.php'; ?>
     <div class="container mt-5">
         <h2 class="text-center mb-4">افزودن گروه</h2>
-        <form method="post">
+        <form method="POST">
             <div class="form-group">
-                <label for="group_name">نام گروه:</label>
+                <label for="group_name">نام گروه</label>
                 <input type="text" class="form-control" id="group_name" name="group_name" required>
             </div>
-            <button type="submit" class="btn btn-primary">ذخیره</button>
+            <button type="submit" class="btn btn-primary">افزودن گروه</button>
         </form>
     </div>
     <?php include '../includes/footer.php'; ?>

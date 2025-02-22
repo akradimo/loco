@@ -2,15 +2,16 @@
 include '../includes/auth.php';
 include '../includes/db.php';
 
-// دریافت آمار خطاها بر اساس گروه
-$stmt = $conn->prepare("
-    SELECT error_groups.group_name, COUNT(errors.id) as error_count 
-    FROM errors 
-    JOIN error_groups ON errors.group_id = error_groups.id 
-    GROUP BY error_groups.group_name
-");
+checkAuth();
+$conn = getDbConnection(); // اتصال به دیتابیس
+
+// دریافت آمار خطاها
+$stmt = $conn->prepare("SELECT error_groups.group_name, COUNT(errors.id) AS error_count 
+                        FROM errors 
+                        JOIN error_groups ON errors.group_id = error_groups.id 
+                        GROUP BY error_groups.group_name");
 $stmt->execute();
-$error_stats = $stmt->fetchAll();
+$statistics = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -33,7 +34,7 @@ $error_stats = $stmt->fetchAll();
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($error_stats as $stat): ?>
+                <?php foreach ($statistics as $stat): ?>
                     <tr>
                         <td><?php echo htmlspecialchars($stat['group_name']); ?></td>
                         <td><?php echo htmlspecialchars($stat['error_count']); ?></td>

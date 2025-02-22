@@ -5,6 +5,12 @@ include '../includes/db.php';
 checkAuth();
 $conn = getDbConnection();
 
+// بررسی نقش کاربر (فقط کاربران مجاز می‌توانند خطا اضافه کنند)
+if (!$_SESSION['is_admin'] && !$_SESSION['can_add_error']) {
+    header("Location: /loco/pages/access_denied.php");
+    exit();
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $error_code = sanitizeInput($_POST['error_code']);
     $error_name = sanitizeInput($_POST['error_name']);

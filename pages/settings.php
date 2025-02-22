@@ -1,32 +1,34 @@
 <?php
 include '../includes/auth.php';
+include '../includes/db.php';
 
-// فقط مدیران می‌توانند به این صفحه دسترسی داشته باشند
+checkAuth();
+
+// بررسی نقش کاربر (فقط ادمین می‌تواند تنظیمات را تغییر دهد)
 if (!$_SESSION['is_admin']) {
     header("Location: /loco/pages/access_denied.php");
     exit();
 }
 
-include '../includes/db.php';
+$conn = getDbConnection();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $site_name = $_POST['site_name'];
-    $site_description = $_POST['site_description'];
+    // اعمال تغییرات تنظیمات
+    $setting_name = sanitizeInput($_POST['setting_name']);
+    $setting_value = sanitizeInput($_POST['setting_value']);
 
-    // بروزرسانی تنظیمات
-    $stmt = $conn->prepare("UPDATE settings SET site_name = :site_name, site_description = :site_description WHERE id = 1");
-    $stmt->execute([
-        'site_name' => $site_name,
-        'site_description' => $site_description
-    ]);
+    $stmt = $conn->prepare("UPDATE settings SET setting_value = :setting_value WHERE setting_name = :setting_name");
+    $stmt->bindParam(':setting_name', $setting_name);
+    $stmt->bindParam(':setting_value', $setting_value);
+    $stmt->execute();
 
-    $success_message = "تنظیمات با موفقیت بروزرسانی شد.";
+    redirect('/loco/pages/settings.php');
 }
 
-// دریافت تنظیمات فعلی
-$stmt = $conn->prepare("SELECT * FROM settings WHERE id = 1");
+// دریافت تنظیمات
+$stmt = $conn->prepare("SELECT * FROM settings");
 $stmt->execute();
-$settings = $stmt->fetch();
+$settings = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -41,18 +43,14 @@ $settings = $stmt->fetch();
     <?php include '../includes/header.php'; ?>
     <div class="container mt-5">
         <h2 class="text-center mb-4">تنظیمات</h2>
-        <?php if (isset($success_message)): ?>
-            <div class="alert alert-success"><?php echo $success_message; ?></div>
-        <?php endif; ?>
-        <form method="post">
-            <div class="form-group">
-                <label for="site_name">نام سایت:</label>
-                <input type="text" class="form-control" id="site_name" name="site_name" value="<?php echo htmlspecialchars($settings['site_name']); ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="site_description">توضیحات سایت:</label>
-                <textarea class="form-control" id="site_description" name="site_description" rows="3"><?php echo htmlspecialchars($settings['site_description']); ?></textarea>
-            </div>
+        <form method="POST">
+            <?php foreach ($settings as $setting): ?>
+                <div class="form-group">
+                    <label for="<?php echo $setting['setting_name']; ?>"><?php echo htmlspecialchars($setting['setting_name']); ?></label>
+                    <input type="text" class="form-control" id="<?php echo $setting['setting_name']; ?>" name="setting_value" value="<?php echo htmlspecialchars($setting['setting_value']); ?>" required>
+                    <input type="hidden" name="setting_name" value="<?php echo $setting['setting_name']; ?>">
+                </div>
+            <?php endforeach; ?>
             <button type="submit" class="btn btn-primary">ذخیره تغییرات</button>
         </form>
     </div>

@@ -1,5 +1,6 @@
 <?php
-session_start();
+include '../includes/auth.php';
+include '../includes/header.php';
 ?>
 
 <!DOCTYPE html>
@@ -14,7 +15,10 @@ session_start();
     <div class="container mt-5">
         <h2 class="text-center mb-4">دسترسی ممنوع</h2>
         <p class="text-center">شما مجوز دسترسی به این صفحه را ندارید.</p>
-        <p class="text-center"><a href="/loco/pages/list_errors.php" class="btn btn-secondary">بازگشت به صفحه اصلی</a></p>
+        <div class="text-center">
+            <a href="/loco/pages/dashboard.php" class="btn btn-primary">بازگشت به داشبورد</a>
+        </div>
     </div>
+    <?php include '../includes/footer.php'; ?>
 </body>
 </html>

@@ -1,37 +1,38 @@
 <?php
 include '../includes/auth.php';
+include '../includes/db.php';
 
-// فقط مدیران می‌توانند به این صفحه دسترسی داشته باشند
+checkAuth();
+
+// بررسی نقش کاربر (فقط ادمین می‌تواند لاگ فعالیت را مشاهده کند)
 if (!$_SESSION['is_admin']) {
     header("Location: /loco/pages/access_denied.php");
     exit();
 }
 
-include '../includes/db.php';
+$conn = getDbConnection();
 
-// دریافت لاگ فعالیت‌ها
-$stmt = $conn->prepare("
-    SELECT al.*, u.fullname 
-    FROM activity_log al 
-    JOIN users u ON al.user_id = u.id 
-    ORDER BY al.activity_date DESC
-");
+// دریافت لاگ فعالیت
+$stmt = $conn->prepare("SELECT activity_log.*, users.fullname 
+                        FROM activity_log 
+                        JOIN users ON activity_log.user_id = users.id 
+                        ORDER BY activity_log.created_at DESC");
 $stmt->execute();
-$activity_logs = $stmt->fetchAll();
+$logs = $stmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>لاگ فعالیت‌ها</title>
+    <title>لاگ فعالیت</title>
     <link rel="stylesheet" href="/loco/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/loco/assets/css/custom.css">
 </head>
 <body>
     <?php include '../includes/header.php'; ?>
     <div class="container mt-5">
-        <h2 class="text-center mb-4">لاگ فعالیت‌ها</h2>
+        <h2 class="text-center mb-4">لاگ فعالیت</h2>
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -41,11 +42,11 @@ $activity_logs = $stmt->fetchAll();
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($activity_logs as $log): ?>
+                <?php foreach ($logs as $log): ?>
                     <tr>
                         <td><?php echo htmlspecialchars($log['fullname']); ?></td>
                         <td><?php echo htmlspecialchars($log['activity']); ?></td>
-                        <td><?php echo htmlspecialchars($log['activity_date']); ?></td>
+                        <td><?php echo htmlspecialchars($log['created_at']); ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
