@@ -1,6 +1,7 @@
 <?php
 include '../includes/auth.php';
 include '../includes/db.php';
+include '../includes/functions.php';
 
 checkAuth();
 
@@ -13,11 +14,22 @@ if (!$_SESSION['is_admin']) {
 $conn = getDbConnection();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // اعمال تغییرات تنظیمات
     $setting_name = sanitizeInput($_POST['setting_name']);
     $setting_value = sanitizeInput($_POST['setting_value']);
 
-    $stmt = $conn->prepare("UPDATE settings SET setting_value = :setting_value WHERE setting_name = :setting_name");
+    // بررسی وجود تنظیمات
+    $stmt = $conn->prepare("SELECT id FROM settings WHERE setting_name = :setting_name");
+    $stmt->bindParam(':setting_name', $setting_name);
+    $stmt->execute();
+    $existingSetting = $stmt->fetch();
+
+    if ($existingSetting) {
+        // به‌روزرسانی تنظیمات موجود
+        $stmt = $conn->prepare("UPDATE settings SET setting_value = :setting_value WHERE setting_name = :setting_name");
+    } else {
+        // افزودن تنظیمات جدید
+        $stmt = $conn->prepare("INSERT INTO settings (setting_name, setting_value) VALUES (:setting_name, :setting_value)");
+    }
     $stmt->bindParam(':setting_name', $setting_name);
     $stmt->bindParam(':setting_value', $setting_value);
     $stmt->execute();
@@ -44,14 +56,15 @@ $settings = $stmt->fetchAll();
     <div class="container mt-5">
         <h2 class="text-center mb-4">تنظیمات</h2>
         <form method="POST">
-            <?php foreach ($settings as $setting): ?>
-                <div class="form-group">
-                    <label for="<?php echo $setting['setting_name']; ?>"><?php echo htmlspecialchars($setting['setting_name']); ?></label>
-                    <input type="text" class="form-control" id="<?php echo $setting['setting_name']; ?>" name="setting_value" value="<?php echo htmlspecialchars($setting['setting_value']); ?>" required>
-                    <input type="hidden" name="setting_name" value="<?php echo $setting['setting_name']; ?>">
-                </div>
-            <?php endforeach; ?>
-            <button type="submit" class="btn btn-primary">ذخیره تغییرات</button>
+            <div class="form-group">
+                <label for="setting_name">نام تنظیمات</label>
+                <input type="text" class="form-control" id="setting_name" name="setting_name" required>
+            </div>
+            <div class="form-group">
+                <label for="setting_value">مقدار تنظیمات</label>
+                <input type="text" class="form-control" id="setting_value" name="setting_value" required>
+            </div>
+            <button type="submit" class="btn btn-primary">ذخیره تنظیمات</button>
         </form>
     </div>
     <?php include '../includes/footer.php'; ?>

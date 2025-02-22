@@ -48,6 +48,17 @@ try {
             FOREIGN KEY (group_id) REFERENCES error_groups(id),
             FOREIGN KEY (created_by) REFERENCES users(id)
         );
+
+        CREATE TABLE IF NOT EXISTS activity_log (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            activity_type VARCHAR(50) NOT NULL,
+            activity_details TEXT,
+            old_value TEXT,
+            new_value TEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        );
     ";
     $conn->exec($sql);
     echo "جداول ایجاد شدند.<br>";

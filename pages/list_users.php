@@ -4,6 +4,13 @@ include '../includes/db.php';
 include '../includes/functions.php';
 
 checkAuth();
+
+// بررسی نقش کاربر (فقط ادمین می‌تواند لیست کاربران را مشاهده کند)
+if (!$_SESSION['is_admin']) {
+    header("Location: /loco/pages/access_denied.php");
+    exit();
+}
+
 $conn = getDbConnection();
 
 // دریافت لیست کاربران
@@ -44,6 +51,9 @@ $users = $stmt->fetchAll();
                         <td>
                             <a href="/loco/pages/edit_user.php?id=<?php echo $user['id']; ?>" class="btn btn-warning btn-sm">ویرایش</a>
                             <a href="/loco/includes/delete_user.php?id=<?php echo $user['id']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('آیا مطمئن هستید؟')">حذف</a>
+                            <?php if ($_SESSION['is_admin']): ?>
+                                <a href="/loco/pages/grant_access.php?id=<?php echo $user['id']; ?>" class="btn btn-info btn-sm">دسترسی</a>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>

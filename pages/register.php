@@ -1,36 +1,22 @@
 <?php
 include '../includes/db.php';
+include '../includes/functions.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $fullname = $_POST['fullname'];
-    $personal_code = $_POST['personal_code'];
+    $username = sanitizeInput($_POST['username']);
+    $password = password_hash(sanitizeInput($_POST['password']), PASSWORD_DEFAULT);
+    $fullname = sanitizeInput($_POST['fullname']);
+    $personal_code = sanitizeInput($_POST['personal_code']);
 
-    // بررسی تکراری نبودن نام کاربری
-    $stmt = $conn->prepare("SELECT * FROM users WHERE username = :username");
-    $stmt->execute(['username' => $username]);
-    $user = $stmt->fetch();
+    $conn = getDbConnection();
+    $stmt = $conn->prepare("INSERT INTO users (username, password, fullname, personal_code) VALUES (:username, :password, :fullname, :personal_code)");
+    $stmt->bindParam(':username', $username);
+    $stmt->bindParam(':password', $password);
+    $stmt->bindParam(':fullname', $fullname);
+    $stmt->bindParam(':personal_code', $personal_code);
+    $stmt->execute();
 
-    if ($user) {
-        $error_message = "نام کاربری قبلاً استفاده شده است.";
-    } else {
-        // ثبت‌نام کاربر جدید
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        $stmt = $conn->prepare("
-            INSERT INTO users (username, password, fullname, personal_code) 
-            VALUES (:username, :password, :fullname, :personal_code)
-        ");
-        $stmt->execute([
-            'username' => $username,
-            'password' => $hashed_password,
-            'fullname' => $fullname,
-            'personal_code' => $personal_code
-        ]);
-
-        header("Location: /loco/pages/login.php?success=1");
-        exit();
-    }
+    redirect('/loco/pages/login.php');
 }
 ?>
 
@@ -38,34 +24,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>ثبت‌نام</title>
+    <title>ثبت نام</title>
     <link rel="stylesheet" href="/loco/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/loco/assets/css/custom.css">
 </head>
 <body>
     <div class="container mt-5">
-        <h2 class="text-center mb-4">ثبت‌نام</h2>
-        <?php if (isset($error_message)): ?>
-            <div class="alert alert-danger"><?php echo $error_message; ?></div>
-        <?php endif; ?>
-        <form method="post">
+        <h2 class="text-center mb-4">ثبت نام</h2>
+        <form method="POST">
             <div class="form-group">
-                <label for="username">نام کاربری:</label>
+                <label for="username">نام کاربری</label>
                 <input type="text" class="form-control" id="username" name="username" required>
             </div>
             <div class="form-group">
-                <label for="password">رمز عبور:</label>
+                <label for="password">رمز عبور</label>
                 <input type="password" class="form-control" id="password" name="password" required>
             </div>
             <div class="form-group">
-                <label for="fullname">نام کامل:</label>
+                <label for="fullname">نام کامل</label>
                 <input type="text" class="form-control" id="fullname" name="fullname" required>
             </div>
             <div class="form-group">
-                <label for="personal_code">کد پرسنلی:</label>
-                <input type="text" class="form-control" id="personal_code" name="personal_code" required>
+                <label for="personal_code">کد پرسنلی</label>
+                <input type="text" class="form-control" id="personal_code" name="personal_code">
             </div>
-            <button type="submit" class="btn btn-primary">ثبت‌نام</button>
+            <button type="submit" class="btn btn-primary">ثبت نام</button>
         </form>
     </div>
 </body>
