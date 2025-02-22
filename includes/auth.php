@@ -14,7 +14,7 @@ if (!function_exists('checkAuth')) {
         // تنظیم مقادیر پیش‌فرض برای session
         $_SESSION['is_admin'] = $_SESSION['is_admin'] ?? false;
         $_SESSION['fullname'] = $_SESSION['fullname'] ?? '';
-        $_SESSION['can_add_error'] = $_SESSION['can_add_error'] ?? false; // افزودن مجوز اضافه کردن خطا
+        $_SESSION['can_add_error'] = $_SESSION['can_add_error'] ?? false;
     }
 }
 ?>

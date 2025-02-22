@@ -1,9 +1,10 @@
 <?php
 include '../includes/db.php';
+include '../includes/functions.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    $username = sanitizeInput($_POST['username']);
+    $password = sanitizeInput($_POST['password']);
 
     $conn = getDbConnection();
     $stmt = $conn->prepare("SELECT * FROM users WHERE username = :username");
@@ -16,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['is_admin'] = $user['is_admin'];
         $_SESSION['fullname'] = $user['fullname'];
+        $_SESSION['can_add_error'] = $user['can_add_error'];
         header("Location: /loco/pages/dashboard.php");
         exit();
     } else {

@@ -44,11 +44,9 @@ $groups = $stmt->fetchAll();
 
 // دریافت لیست استان‌ها و شهرستان‌ها از فایل iran.json
 $iranData = json_decode(file_get_contents('../assets/data/iran.json'), true);
-$provinces = array_keys($iranData);
 
 // دریافت لیست ایستگاه‌ها از فایل railway.json
 $railwayData = json_decode(file_get_contents('../assets/data/railway.json'), true);
-$stations = array_keys($railwayData);
 ?>
 
 <!DOCTYPE html>
@@ -58,6 +56,7 @@ $stations = array_keys($railwayData);
     <title>افزودن خطا</title>
     <link rel="stylesheet" href="/loco/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/loco/assets/css/custom.css">
+    <script src="/loco/assets/js/jquery.min.js"></script> <!-- اضافه کردن jQuery -->
 </head>
 <body>
     <?php include '../includes/header.php'; ?>
@@ -87,24 +86,22 @@ $stations = array_keys($railwayData);
             <div class="form-group">
                 <label for="province">استان</label>
                 <select class="form-control" id="province" name="province" required>
-                    <?php foreach ($provinces as $province): ?>
-                        <option value="<?php echo htmlspecialchars($province); ?>"><?php echo htmlspecialchars($province); ?></option>
+                    <?php foreach ($iranData as $provinceData): ?>
+                        <option value="<?php echo htmlspecialchars($provinceData['province']); ?>"><?php echo htmlspecialchars($provinceData['province']); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
             <div class="form-group">
-                <label for="city">شهرستان</label>
+                <label for="city">شهر</label>
                 <select class="form-control" id="city" name="city" required>
-                    <?php foreach ($iranData[$_POST['province']] ?? [] as $city): ?>
-                        <option value="<?php echo htmlspecialchars($city); ?>"><?php echo htmlspecialchars($city); ?></option>
-                    <?php endforeach; ?>
+                    <!-- شهرها توسط JavaScript پر می‌شوند -->
                 </select>
             </div>
             <div class="form-group">
                 <label for="station">ایستگاه</label>
                 <select class="form-control" id="station" name="station" required>
-                    <?php foreach ($stations as $station): ?>
-                        <option value="<?php echo htmlspecialchars($station); ?>"><?php echo htmlspecialchars($station); ?></option>
+                    <?php foreach ($railwayData as $station): ?>
+                        <option value="<?php echo htmlspecialchars($station['value']); ?>"><?php echo htmlspecialchars($station['value']); ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -112,5 +109,25 @@ $stations = array_keys($railwayData);
         </form>
     </div>
     <?php include '../includes/footer.php'; ?>
+
+    <script>
+        // تابع برای به‌روزرسانی لیست شهرها بر اساس استان انتخاب‌شده
+        $(document).ready(function() {
+            const iranData = <?php echo json_encode($iranData); ?>;
+
+            $('#province').change(function() {
+                const selectedProvince = $(this).val();
+                const cities = iranData.find(province => province.province === selectedProvince).cities;
+
+                $('#city').empty(); // پاک کردن لیست شهرها
+                cities.forEach(city => {
+                    $('#city').append(`<option value="${city}">${city}</option>`);
+                });
+            });
+
+            // بارگذاری اولیه شهرها
+            $('#province').trigger('change');
+        });
+    </script>
 </body>
 </html>

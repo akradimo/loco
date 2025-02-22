@@ -24,6 +24,7 @@ try {
             fullname VARCHAR(100) NOT NULL,
             personal_code VARCHAR(20),
             is_admin TINYINT(1) DEFAULT 0,
+            can_add_error TINYINT(1) DEFAULT 0,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
 
@@ -56,12 +57,14 @@ try {
     $password = password_hash('admin123', PASSWORD_DEFAULT); // رمز عبور پیش‌فرض
     $fullname = 'مدیر سیستم';
     $is_admin = 1;
+    $can_add_error = 1;
 
-    $stmt = $conn->prepare("INSERT INTO users (username, password, fullname, is_admin) VALUES (:username, :password, :fullname, :is_admin)");
+    $stmt = $conn->prepare("INSERT INTO users (username, password, fullname, is_admin, can_add_error) VALUES (:username, :password, :fullname, :is_admin, :can_add_error)");
     $stmt->bindParam(':username', $username);
     $stmt->bindParam(':password', $password);
     $stmt->bindParam(':fullname', $fullname);
     $stmt->bindParam(':is_admin', $is_admin);
+    $stmt->bindParam(':can_add_error', $can_add_error);
     $stmt->execute();
     echo "کاربر پیش‌فرض (ادمین) ایجاد شد.<br>";
 
