@@ -1,6 +1,10 @@
 <?php
 include '../includes/auth.php';
-include '../includes/header.php';
+include '../includes/functions.php';
+
+// ارسال ایمیل به مدیر
+$message = "کاربر با شناسه {$_SESSION['user_id']} سعی کرد به بخش مدیریت دسترسی پیدا کند.";
+sendEmailToAdmin($message);
 ?>
 
 <!DOCTYPE html>

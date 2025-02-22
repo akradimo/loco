@@ -51,6 +51,16 @@ CREATE TABLE error_history (
     FOREIGN KEY (error_id) REFERENCES errors(id),
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+CREATE TABLE IF NOT EXISTS activity_log (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    activity_type VARCHAR(50) NOT NULL, -- نوع فعالیت (مثلاً افزودن خطا، حذف گروه و ...)
+    activity_details TEXT, -- جزئیات فعالیت (مثلاً کد خطا، نام گروه و ...)
+    old_value TEXT, -- مقدار قبلی (برای ویرایش)
+    new_value TEXT, -- مقدار جدید (برای ویرایش)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
 
 -- درج کاربر پیش‌فرض (ادمین)
 INSERT INTO users (username, password, full_name, personal_code, is_admin, can_edit_error, can_delete_error)

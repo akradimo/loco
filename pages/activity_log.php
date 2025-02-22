@@ -1,6 +1,7 @@
 <?php
 include '../includes/auth.php';
 include '../includes/db.php';
+include '../includes/functions.php';
 
 checkAuth();
 
@@ -12,7 +13,7 @@ if (!$_SESSION['is_admin']) {
 
 $conn = getDbConnection();
 
-// دریافت لاگ فعالیت
+// دریافت لاگ فعالیت‌ها
 $stmt = $conn->prepare("SELECT activity_log.*, users.fullname 
                         FROM activity_log 
                         JOIN users ON activity_log.user_id = users.id 
@@ -37,7 +38,10 @@ $logs = $stmt->fetchAll();
             <thead>
                 <tr>
                     <th>کاربر</th>
-                    <th>فعالیت</th>
+                    <th>نوع فعالیت</th>
+                    <th>جزئیات</th>
+                    <th>مقدار قبلی</th>
+                    <th>مقدار جدید</th>
                     <th>تاریخ</th>
                 </tr>
             </thead>
@@ -45,7 +49,10 @@ $logs = $stmt->fetchAll();
                 <?php foreach ($logs as $log): ?>
                     <tr>
                         <td><?php echo htmlspecialchars($log['fullname']); ?></td>
-                        <td><?php echo htmlspecialchars($log['activity']); ?></td>
+                        <td><?php echo htmlspecialchars($log['activity_type']); ?></td>
+                        <td><?php echo htmlspecialchars($log['activity_details']); ?></td>
+                        <td><?php echo htmlspecialchars($log['old_value']); ?></td>
+                        <td><?php echo htmlspecialchars($log['new_value']); ?></td>
                         <td><?php echo htmlspecialchars($log['created_at']); ?></td>
                     </tr>
                 <?php endforeach; ?>

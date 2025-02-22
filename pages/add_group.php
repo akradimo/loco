@@ -16,11 +16,22 @@ $conn = getDbConnection();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $group_name = sanitizeInput($_POST['group_name']);
 
-    $stmt = $conn->prepare("INSERT INTO error_groups (group_name) VALUES (:group_name)");
+    // بررسی تکراری بودن گروه
+    $stmt = $conn->prepare("SELECT id FROM error_groups WHERE group_name = :group_name");
     $stmt->bindParam(':group_name', $group_name);
     $stmt->execute();
+    $existingGroup = $stmt->fetch();
 
-    redirect('/loco/pages/list_groups.php');
+    if ($existingGroup) {
+        $error = "این گروه موجود است. لطفاً اگر مشکلی وجود دارد با مدیر تماس بگیرید.";
+    } else {
+        // اضافه کردن گروه جدید
+        $stmt = $conn->prepare("INSERT INTO error_groups (group_name) VALUES (:group_name)");
+        $stmt->bindParam(':group_name', $group_name);
+        $stmt->execute();
+
+        redirect('/loco/pages/list_groups.php');
+    }
 }
 ?>
 
@@ -36,6 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php include '../includes/header.php'; ?>
     <div class="container mt-5">
         <h2 class="text-center mb-4">افزودن گروه</h2>
+        <?php if (isset($error)): ?>
+            <div class="alert alert-danger"><?php echo $error; ?></div>
+        <?php endif; ?>
         <form method="POST">
             <div class="form-group">
                 <label for="group_name">نام گروه</label>

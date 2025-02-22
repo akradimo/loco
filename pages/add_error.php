@@ -6,6 +6,47 @@ include '../includes/functions.php';
 checkAuth();
 $conn = getDbConnection();
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $error_code = sanitizeInput($_POST['error_code']);
+    $error_name = sanitizeInput($_POST['error_name']);
+    $group_id = sanitizeInput($_POST['group_id']);
+    $description = sanitizeInput($_POST['description']);
+    $province = sanitizeInput($_POST['province']);
+    $city = sanitizeInput($_POST['city']);
+    $station = sanitizeInput($_POST['station']);
+    $created_by = $_SESSION['user_id'];
+
+    // بررسی تکراری بودن کد خطا
+    $stmt = $conn->prepare("SELECT id FROM errors WHERE LOWER(error_code) = LOWER(:error_code)");
+    $stmt->bindParam(':error_code', $error_code);
+    $stmt->execute();
+    $existingError = $stmt->fetch();
+
+    if ($existingError) {
+        $error = "این کد خطا موجود است. لطفاً کد دیگری وارد کنید.";
+    } else {
+        // اضافه کردن خطای جدید
+        $stmt = $conn->prepare("INSERT INTO errors (error_code, error_name, group_id, description, province, city, station, created_by) 
+                                VALUES (:error_code, :error_name, :group_id, :description, :province, :city, :station, :created_by)");
+        $stmt->bindParam(':error_code', $error_code);
+        $stmt->bindParam(':error_name', $error_name);
+        $stmt->bindParam(':group_id', $group_id);
+        $stmt->bindParam(':description', $description);
+        $stmt->bindParam(':province', $province);
+        $stmt->bindParam(':city', $city);
+        $stmt->bindParam(':station', $station);
+        $stmt->bindParam(':created_by', $created_by);
+        $stmt->execute();
+
+        // ثبت فعالیت در لاگ
+        logActivity($_SESSION['user_id'], 'افزودن خطا', "کد خطا: $error_code, نام خطا: $error_name");
+
+        redirect('/loco/pages/list_errors.php');
+    }
+}
+checkAuth();
+$conn = getDbConnection();
+
 // بررسی نقش کاربر (فقط کاربران مجاز می‌توانند خطا اضافه کنند)
 if (!$_SESSION['is_admin'] && !$_SESSION['can_add_error']) {
     header("Location: /loco/pages/access_denied.php");
@@ -22,19 +63,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $station = sanitizeInput($_POST['station']);
     $created_by = $_SESSION['user_id'];
 
-    $stmt = $conn->prepare("INSERT INTO errors (error_code, error_name, group_id, description, province, city, station, created_by) 
-                            VALUES (:error_code, :error_name, :group_id, :description, :province, :city, :station, :created_by)");
+    // بررسی تکراری بودن کد خطا (بدون توجه به حروف کوچک یا بزرگ)
+    $stmt = $conn->prepare("SELECT id FROM errors WHERE LOWER(error_code) = LOWER(:error_code)");
     $stmt->bindParam(':error_code', $error_code);
-    $stmt->bindParam(':error_name', $error_name);
-    $stmt->bindParam(':group_id', $group_id);
-    $stmt->bindParam(':description', $description);
-    $stmt->bindParam(':province', $province);
-    $stmt->bindParam(':city', $city);
-    $stmt->bindParam(':station', $station);
-    $stmt->bindParam(':created_by', $created_by);
     $stmt->execute();
+    $existingError = $stmt->fetch();
 
-    redirect('/loco/pages/list_errors.php');
+    if ($existingError) {
+        $error = "این کد خطا موجود است. لطفاً کد دیگری وارد کنید.";
+    } else {
+        // اضافه کردن خطای جدید
+        $stmt = $conn->prepare("INSERT INTO errors (error_code, error_name, group_id, description, province, city, station, created_by) 
+                                VALUES (:error_code, :error_name, :group_id, :description, :province, :city, :station, :created_by)");
+        $stmt->bindParam(':error_code', $error_code);
+        $stmt->bindParam(':error_name', $error_name);
+        $stmt->bindParam(':group_id', $group_id);
+        $stmt->bindParam(':description', $description);
+        $stmt->bindParam(':province', $province);
+        $stmt->bindParam(':city', $city);
+        $stmt->bindParam(':station', $station);
+        $stmt->bindParam(':created_by', $created_by);
+        $stmt->execute();
+
+        redirect('/loco/pages/list_errors.php');
+    }
 }
 
 // دریافت لیست گروه‌ها
@@ -62,6 +114,9 @@ $railwayData = json_decode(file_get_contents('../assets/data/railway.json'), tru
     <?php include '../includes/header.php'; ?>
     <div class="container mt-5">
         <h2 class="text-center mb-4">افزودن خطا</h2>
+        <?php if (isset($error)): ?>
+            <div class="alert alert-danger"><?php echo $error; ?></div>
+        <?php endif; ?>
         <form method="POST">
             <div class="form-group">
                 <label for="error_code">کد خطا</label>
